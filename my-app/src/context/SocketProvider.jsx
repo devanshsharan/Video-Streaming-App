@@ -9,10 +9,15 @@ export const useSocket = () => {
 };
 
 export const SocketProvider = (props) => {
-  const socket = useMemo(
-    () => io("https://video-streaming-app-server-psi.vercel.app"),
-    []
-  );
+  const socket = useMemo(() => {
+    return io("https://video-streaming-app-server-psi.vercel.app", {
+      transports: ["websocket"],
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      timeout: 20000,
+    });
+  }, []);
 
   return (
     <SocketContext.Provider value={socket}>
