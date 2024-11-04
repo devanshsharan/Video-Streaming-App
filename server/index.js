@@ -5,15 +5,17 @@ const { Server } = require("socket.io");
 const server = http.createServer();
 
 const io = new Server(server, {
-  path: '/socket',  // This path must match the client-side configuration
-  wssEngine: ['ws','wss'],
-  transports: ['websocket','polling'],
+  path: '/socket',
   cors: {
-    origin: "https://video-streaming-app-sooty.vercel.app", // Your client URL
+    origin: "https://video-streaming-app-sooty.vercel.app",
     methods: ["GET", "POST"],
-    credentials: true, // Allow credentials if needed
+    credentials: true, // if needed
   },
-  allowEIO3: true, // Enable compatibility with Engine.IO v3
+  allowEIO3: true,
+});
+const PORT = process.env.PORT || 8000;
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
 
