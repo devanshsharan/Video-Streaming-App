@@ -4,12 +4,16 @@ const { Server } = require("socket.io");
 // Create an HTTP server
 const server = http.createServer();
 
-// Attach Socket.IO to the HTTP server
 const io = new Server(server, {
+  path: '/socket',  // This path must match the client-side configuration
+  wssEngine: ['ws','wss'],
+  transports: ['websocket','polling'],
   cors: {
     origin: "https://video-streaming-app-sooty.vercel.app", // Your client URL
     methods: ["GET", "POST"],
+    credentials: true, // Allow credentials if needed
   },
+  allowEIO3: true, // Enable compatibility with Engine.IO v3
 });
 
 

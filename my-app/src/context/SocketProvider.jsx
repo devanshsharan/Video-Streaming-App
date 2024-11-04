@@ -11,8 +11,9 @@ export const useSocket = () => {
 export const SocketProvider = (props) => {
   const socket = useMemo(() => {
     return io("https://video-streaming-app-server-psi.vercel.app", {
-      transports: ["websocket"],
+      path: "/socket", // This path must match the server-side configuration
       reconnection: true,
+      transports: ["websocket", "polling"],
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
       timeout: 20000,
