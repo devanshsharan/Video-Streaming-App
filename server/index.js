@@ -1,7 +1,11 @@
 const { Server } = require("socket.io");
 
+
 const io = new Server(8000, {
-  cors: true,
+  cors: {
+    origin: "https://video-streaming-app-sooty.vercel.app", // Allow your client URL
+    methods: ["GET", "POST"], // Specify allowed methods
+  },
 });
 
 const emailToSocketIdMap = new Map();

@@ -4,15 +4,20 @@ import { io } from "socket.io-client";
 const SocketContext = createContext(null);
 
 export const useSocket = () => {
-  const socket = useContext(SocketContext);
-  return socket;
+  return useContext(SocketContext);
 };
 
 export const SocketProvider = (props) => {
-  const socket = useMemo(
-    () => io("https://video-streaming-app-server-psi.vercel.app"),
-    []
-  );
+  // Configure the socket connection with extra options
+  const socket = useMemo(() => {
+    return io("https://video-streaming-app-server-psi.vercel.app", {
+      transports: ["websocket"], // Ensure WebSocket is used
+      reconnection: true, // Enable reconnection
+      reconnectionAttempts: 5, // Number of reconnection attempts
+      reconnectionDelay: 1000, // Delay between reconnections
+      timeout: 20000, // Connection timeout
+    });
+  }, []);
 
   return (
     <SocketContext.Provider value={socket}>
