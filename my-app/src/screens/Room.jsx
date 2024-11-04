@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import ReactPlayer from "react-player";
 import peer from "../service/peer";
 import { useSocket } from "../context/SocketProvider";
+import "./RoomPage.css";
 
 const RoomPage = () => {
   const socket = useSocket();
@@ -19,7 +20,6 @@ const RoomPage = () => {
       audio: true,
       video: true,
     });
-
     const offer = await peer.getOffer();
     socket.emit("user:call", { to: remoteSocketId, offer });
     setMyStream(stream);
@@ -33,7 +33,7 @@ const RoomPage = () => {
         video: true,
       });
       setMyStream(stream);
-      console.log(`Incomming Call`, from, offer);
+      console.log(`Incoming Call`, from, offer);
       const ans = await peer.getAnswer(offer);
       socket.emit("call:accepted", { to: from, ans });
     },
@@ -49,7 +49,7 @@ const RoomPage = () => {
   const handleCallAccepted = useCallback(
     ({ from, ans }) => {
       peer.setLocalDescription(ans);
-      console.log("Call Accepted");
+      console.log("Call Accepted!");
       sendStreams();
     },
     [sendStreams]
@@ -82,6 +82,7 @@ const RoomPage = () => {
   useEffect(() => {
     peer.peer.addEventListener("track", async (ev) => {
       const remoteStream = ev.streams;
+      console.log("GOT TRACKS!!");
       setRemoteStream(remoteStream[0]);
     });
   }, []);
@@ -89,14 +90,14 @@ const RoomPage = () => {
   useEffect(() => {
     socket.on("user:joined", handleUserJoined);
     socket.on("incomming:call", handleIncommingCall);
-    socket.on("call:acepted", handleCallAccepted);
+    socket.on("call:accepted", handleCallAccepted);
     socket.on("peer:nego:needed", handleNegoNeedIncomming);
     socket.on("peer:nego:final", handleNegoNeedFinal);
 
     return () => {
       socket.off("user:joined", handleUserJoined);
       socket.off("incomming:call", handleIncommingCall);
-      socket.off("call:acepted", handleCallAccepted);
+      socket.off("call:accepted", handleCallAccepted);
       socket.off("peer:nego:needed", handleNegoNeedIncomming);
       socket.off("peer:nego:final", handleNegoNeedFinal);
     };

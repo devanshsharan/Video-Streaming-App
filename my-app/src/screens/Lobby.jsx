@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { useSocket } from "../context/SocketProvider";
 import { useNavigate } from "react-router-dom";
+import { useSocket } from "../context/SocketProvider";
+import "./LobbyScreen.css";
 
 const LobbyScreen = () => {
   const [email, setEmail] = useState("");
@@ -28,13 +29,13 @@ const LobbyScreen = () => {
   useEffect(() => {
     socket.on("room:join", handleJoinRoom);
     return () => {
-      socket.off("room:join");
+      socket.off("room:join", handleJoinRoom);
     };
   }, [socket, handleJoinRoom]);
 
   return (
     <div>
-      <h1>Lobby</h1>
+      <h1>Welcome</h1>
       <form onSubmit={handleSubmitForm}>
         <label htmlFor="email">Email ID</label>
         <input
