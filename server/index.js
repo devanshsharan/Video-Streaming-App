@@ -1,11 +1,17 @@
+const http = require("http");
 const { Server } = require("socket.io");
 
-const io = new Server(8000, {
+// Create an HTTP server
+const server = http.createServer();
+
+// Attach Socket.IO to the HTTP server
+const io = new Server(server, {
   cors: {
-    origin: "https://video-streaming-app-sooty.vercel.app", // Allow your client URL
-    methods: ["GET", "POST"], // Specify allowed methods
+    origin: "https://video-streaming-app-sooty.vercel.app", // Your client URL
+    methods: ["GET", "POST"],
   },
 });
+
 
 const emailToSocketIdMap = new Map();
 const socketidToEmailMap = new Map();
@@ -39,3 +45,7 @@ io.on("connection", (socket) => {
   })
 
   });
+  const PORT = process.env.PORT || 8000;
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
