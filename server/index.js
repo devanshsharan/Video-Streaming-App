@@ -1,10 +1,10 @@
 const { Server } = require("socket.io");
 
-
-const io = new Server(8000, {
+const io = new Server(PORT, {
   cors: {
-    origin: "https://video-streaming-app-sooty.vercel.app", // Allow your client URL
-    methods: ["GET", "POST"], // Specify allowed methods
+    origin: "https://video-streaming-app-sooty.vercel.app", // Your client URL
+    methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 
